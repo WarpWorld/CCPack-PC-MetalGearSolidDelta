@@ -6,14 +6,14 @@ using AddressChain = ConnectorLib.Memory.AddressChain<ConnectorLib.Inject.Inject
 using ConnectorType = CrowdControl.Common.ConnectorType;
 using Log = CrowdControl.Common.Log;
 
-namespace CrowdControl.Games.Packs.MGS3;
+namespace CrowdControl.Games.Packs.MetalGearSolidDelta;
 
 [SuppressMessage("ReSharper", "StringLiteralTypo")]
-public class MGS3 : InjectEffectPack
+public class MetalGearSolidDelta : InjectEffectPack
 {
-    public override Game Game { get; } = new("MGSDelta-Win64-Shipping", "MGS3", "PC", ConnectorType.PCConnector);
+    public override Game Game { get; } = new("Metal Gear Solid Delta: Snake Eater", "MetalGearSolidDelta", "PC", ConnectorType.PCConnector);
 
-    public MGS3(UserRecord player, Func<CrowdControlBlock, bool> responseHandler, Action<object> statusUpdateHandler)
+    public MetalGearSolidDelta(UserRecord player, Func<CrowdControlBlock, bool> responseHandler, Action<object> statusUpdateHandler)
         : base(player, responseHandler, statusUpdateHandler)
     {
         VersionProfiles = [new("MGSDelta-Win64-Shipping", InitGame, DeinitGame)];
@@ -259,7 +259,7 @@ public class MGS3 : InjectEffectPack
         public const int MaxCapacityOffset = 0x2;
     }
 
-    public static class MGS3UsableObjects
+    public static class MetalGearSolidDeltaUsableObjects
     {
         public static readonly Weapon NoneWeapon = new Weapon("None Weapon", 0);
         public static readonly Weapon SurvivalKnife = new Weapon("Survival Knife", 1);
@@ -642,7 +642,7 @@ public class MGS3 : InjectEffectPack
     private Weapon GetCurrentEquippedWeapon()
     {
         byte weaponId = Get8(snakeCurrentEquippedWeapon);
-        if (MGS3UsableObjects.AllWeapons.TryGetValue(weaponId, out Weapon weapon))
+        if (MetalGearSolidDeltaUsableObjects.AllWeapons.TryGetValue(weaponId, out Weapon weapon))
         {
             return weapon;
         }
@@ -659,7 +659,7 @@ public class MGS3 : InjectEffectPack
         {
             Log.Message("Attempting to set Snake's Current Weapon to None.");
             byte originalWeapon = Get8(snakeCurrentEquippedWeapon);
-            Set8(snakeCurrentEquippedWeapon, (byte)MGS3UsableObjects.NoneWeapon.Index);
+            Set8(snakeCurrentEquippedWeapon, (byte)MetalGearSolidDeltaUsableObjects.NoneWeapon.Index);
             byte newWeapon = Get8(snakeCurrentEquippedWeapon);
             Log.Message($"Original Weapon was {originalWeapon}, new Weapon is {newWeapon}.");
         }
@@ -3607,7 +3607,7 @@ public class MGS3 : InjectEffectPack
             #region Weapons
 
             case "removeSurvivalKnife":
-                if (IsInCutscene() || (GetWeaponValue(MGS3UsableObjects.SurvivalKnife) == 0))
+                if (IsInCutscene() || (GetWeaponValue(MetalGearSolidDeltaUsableObjects.SurvivalKnife) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -3621,409 +3621,409 @@ public class MGS3 : InjectEffectPack
                     TimeSpan.Zero,
                     () => IsReady(request),
                     TimeSpan.FromMilliseconds(500),
-                    () => RemoveWeapon(MGS3UsableObjects.SurvivalKnife),
+                    () => RemoveWeapon(MetalGearSolidDeltaUsableObjects.SurvivalKnife),
                     TimeSpan.FromMilliseconds(500),
                     false);
 
                 knifeRemoveAct.WhenCompleted.Then
                 (_ =>
                 {
-                    GiveWeapon(MGS3UsableObjects.SurvivalKnife);
+                    GiveWeapon(MetalGearSolidDeltaUsableObjects.SurvivalKnife);
                     Connector.SendMessage("Snake's survival knife has been restored.");
                 });
                 break;
 
             case "giveFork":
-                if (IsInCutscene() || (GetWeaponValue(MGS3UsableObjects.Fork) == 1))
+                if (IsInCutscene() || (GetWeaponValue(MetalGearSolidDeltaUsableObjects.Fork) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
                 }
                 TryEffect(request,
                     () => true,
-                    () => GiveWeapon(MGS3UsableObjects.Fork),
+                    () => GiveWeapon(MetalGearSolidDeltaUsableObjects.Fork),
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake a fork."));
                 break;
 
             case "removeFork":
-                if (IsInCutscene() || (GetWeaponValue(MGS3UsableObjects.Fork) == 0))
+                if (IsInCutscene() || (GetWeaponValue(MetalGearSolidDeltaUsableObjects.Fork) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
                 }
                 TryEffect(request,
                     () => true,
-                    () => RemoveWeapon(MGS3UsableObjects.Fork),
+                    () => RemoveWeapon(MetalGearSolidDeltaUsableObjects.Fork),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed Snake's fork."));
                 break;
 
             case "giveEzGun":
-                if (IsInCutscene() || (GetWeaponValue(MGS3UsableObjects.EzGun) == 1))
+                if (IsInCutscene() || (GetWeaponValue(MetalGearSolidDeltaUsableObjects.EzGun) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
                 }
                 TryEffect(request,
                     () => true,
-                    () => GiveWeapon(MGS3UsableObjects.EzGun),
+                    () => GiveWeapon(MetalGearSolidDeltaUsableObjects.EzGun),
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake the EZ Gun."));
                 break;
 
             case "removeEzGun":
-                if (IsInCutscene() || (GetWeaponValue(MGS3UsableObjects.EzGun) == 0))
+                if (IsInCutscene() || (GetWeaponValue(MetalGearSolidDeltaUsableObjects.EzGun) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
                 }
                 TryEffect(request,
                     () => true,
-                    () => RemoveWeapon(MGS3UsableObjects.EzGun),
+                    () => RemoveWeapon(MetalGearSolidDeltaUsableObjects.EzGun),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed Snake's EZ Gun."));
                 break;
 
             case "givePatriot":
-                if (GetWeaponValue(MGS3UsableObjects.Patriot) == 1)
+                if (GetWeaponValue(MetalGearSolidDeltaUsableObjects.Patriot) == 1)
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
                 }
                 TryEffect(request,
                     () => true,
-                    () => GiveWeapon(MGS3UsableObjects.Patriot),
+                    () => GiveWeapon(MetalGearSolidDeltaUsableObjects.Patriot),
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake the EZ Gun."));
                 break;
 
             case "removePatriot":
-                if (GetWeaponValue(MGS3UsableObjects.Patriot) == 0)
+                if (GetWeaponValue(MetalGearSolidDeltaUsableObjects.Patriot) == 0)
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
                 }
                 TryEffect(request,
                     () => true,
-                    () => RemoveWeapon(MGS3UsableObjects.Patriot),
+                    () => RemoveWeapon(MetalGearSolidDeltaUsableObjects.Patriot),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed Snake's EZ Gun."));
                 break;
 
             case "addMK22Ammo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.MK22, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.MK22, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to MK22."));
                 break;
 
             case "removeMK22Ammo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.MK22, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.MK22, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from MK22."));
                 break;
 
             case "addM1911A1Ammo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.M1911A1, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.M1911A1, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to M1911A1."));
                 break;
 
             case "removeM1911A1Ammo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.M1911A1, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.M1911A1, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from M1911A1."));
                 break;
 
             case "addSAAAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.SAA, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.SAA, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to SAA."));
                 break;
 
             case "removeSAAAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.SAA, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.SAA, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from SAA."));
                 break;
 
             case "addScorpionAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.Scorpion, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Scorpion, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to Scorpion."));
                 break;
 
             case "removeScorpionAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.Scorpion, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Scorpion, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from Scorpion."));
                 break;
 
             case "addXM16E1Ammo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.XM16E1, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.XM16E1, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to XM16E1."));
                 break;
 
             case "removeXM16E1Ammo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.XM16E1, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.XM16E1, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from XM16E1."));
                 break;
 
             case "addAK47Ammo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.AK47, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.AK47, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to AK47."));
                 break;
 
             case "removeAK47Ammo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.AK47, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.AK47, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from AK47."));
                 break;
 
             case "addM63Ammo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.M63, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.M63, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to M63."));
                 break;
 
             case "removeM63Ammo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.M63, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.M63, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from M63."));
                 break;
 
             case "addM37Ammo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.M37, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.M37, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to M37."));
                 break;
 
             case "removeM37Ammo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.M37, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.M37, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from M37."));
                 break;
 
             case "addSVDAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.SVD, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.SVD, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to SVD."));
                 break;
 
             case "removeSVDAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.SVD, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.SVD, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from SVD."));
                 break;
 
             case "addMosinNagantAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.MosinNagant, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.MosinNagant, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to Mosin-Nagant."));
                 break;
 
             case "removeMosinNagantAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.MosinNagant, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.MosinNagant, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from Mosin-Nagant."));
                 break;
 
             case "addRPG7Ammo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.RPG7, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.RPG7, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} ammo to RPG-7."));
                 break;
 
             case "removeRPG7Ammo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.RPG7, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.RPG7, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ammo from RPG-7."));
                 break;
 
             case "addGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.Grenade, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Grenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} grenade(s)."));
                 break;
 
             case "removeGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.Grenade, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Grenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} grenade(s)."));
                 break;
 
             case "addWpGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.WpGrenade, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.WpGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} WP grenade(s)."));
                 break;
 
             case "removeWpGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.WpGrenade, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.WpGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} WP grenade(s)."));
                 break;
 
             case "addStunGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.StunGrenade, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.StunGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} stun grenade(s)."));
                 break;
 
             case "removeStunGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.StunGrenade, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.StunGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} stun grenade(s)."));
                 break;
 
             case "addChaffGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.ChaffGrenade, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.ChaffGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} chaff grenade(s)."));
                 break;
 
             case "removeChaffGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.ChaffGrenade, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.ChaffGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} chaff grenade(s)."));
                 break;
 
             case "addSmokeGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.SmokeGrenade, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.SmokeGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} smoke grenade(s)."));
                 break;
 
             case "removeSmokeGrenadeAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.SmokeGrenade, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.SmokeGrenade, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} smoke grenade(s)."));
                 break;
 
             case "addEmptyMagazineAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.EmptyMagazine, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.EmptyMagazine, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} empty magazine(s)."));
                 break;
 
             case "removeEmptyMagazineAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.EmptyMagazine, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.EmptyMagazine, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} empty magazine(s)."));
                 break;
 
             case "addTntAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.TNT, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.TNT, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} TNT."));
                 break;
 
             case "removeTntAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.TNT, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.TNT, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} TNT."));
                 break;
 
             case "addClaymoreAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.Claymore, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Claymore, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} claymore(s)."));
                 break;
 
             case "removeClaymoreAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.Claymore, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Claymore, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} claymore(s)."));
                 break;
 
             case "addBookAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.Book, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Book, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} book(s)."));
                 break;
 
             case "removeBookAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.Book, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Book, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} book(s)."));
                 break;
 
             case "addMousetrapAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.Mousetrap, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Mousetrap, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} mousetrap(s)."));
                 break;
 
             case "removeMousetrapAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.Mousetrap, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Mousetrap, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} mousetrap(s)."));
                 break;
 
             case "addCigSprayAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.CigSpray, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.CigSpray, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} cig spray(s)."));
                 break;
 
             case "removeCigSprayAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.CigSpray, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.CigSpray, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} cig spray(s)."));
                 break;
 
             case "addHandkerchiefAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddAmmoToWeapon(MGS3UsableObjects.Handkerchief, (short)request.Quantity),
+                    () => AddAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Handkerchief, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} added {request.Quantity} handkerchief(s)."));
                 break;
 
             case "removeHandkerchiefAmmo":
                 TryEffect(request,
                     () => true,
-                    () => SubtractAmmoFromWeapon(MGS3UsableObjects.Handkerchief, (short)request.Quantity),
+                    () => SubtractAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Handkerchief, (short)request.Quantity),
                     () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} handkerchief(s)."));
                 break;
             #endregion
@@ -4033,322 +4033,322 @@ public class MGS3 : InjectEffectPack
             case "addMK22MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.MK22, (short)request.Quantity, 10),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.MK22, (short)request.Quantity, 10),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased MK22 max ammo by {request.Quantity}."));
                 break;
 
             case "removeMK22MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.MK22, (short)request.Quantity, 10),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.MK22, (short)request.Quantity, 10),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased MK22 max ammo by {request.Quantity}."));
                 break;
 
             case "addM1911A1MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.M1911A1, (short)request.Quantity, 10),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.M1911A1, (short)request.Quantity, 10),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased M1911A1 max ammo by {request.Quantity}."));
                 break;
 
             case "removeM1911A1MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.M1911A1, (short)request.Quantity, 10),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.M1911A1, (short)request.Quantity, 10),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased M1911A1 max ammo by {request.Quantity}."));
                 break;
 
             case "addSAAAMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.SAA, (short)request.Quantity, 6),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.SAA, (short)request.Quantity, 6),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased SAA max ammo by {request.Quantity}."));
                 break;
 
             case "removeSAAAMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.SAA, (short)request.Quantity, 6),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.SAA, (short)request.Quantity, 6),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased SAA max ammo by {request.Quantity}."));
                 break;
 
             case "addM37MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.M37, (short)request.Quantity, 4),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.M37, (short)request.Quantity, 4),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased M37 max ammo by {request.Quantity}."));
                 break;
 
             case "removeM37MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.M37, (short)request.Quantity, 4),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.M37, (short)request.Quantity, 4),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased M37 max ammo by {request.Quantity}."));
                 break;
 
             case "addSVDMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.SVD, (short)request.Quantity, 10),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.SVD, (short)request.Quantity, 10),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased SVD max ammo by {request.Quantity}."));
                 break;
 
             case "removeSVDMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.SVD, (short)request.Quantity, 10),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.SVD, (short)request.Quantity, 10),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased SVD max ammo by {request.Quantity}."));
                 break;
 
             case "addMosinNagantMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.MosinNagant, (short)request.Quantity, 5),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.MosinNagant, (short)request.Quantity, 5),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased Mosin-Nagant max ammo by {request.Quantity}."));
                 break;
 
             case "removeMosinNagantMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.MosinNagant, (short)request.Quantity, 5),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.MosinNagant, (short)request.Quantity, 5),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased Mosin-Nagant max ammo by {request.Quantity}."));
                 break;
 
             case "addRPG7MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.RPG7, (short)request.Quantity, 2),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.RPG7, (short)request.Quantity, 2),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased RPG-7 max ammo by {request.Quantity}."));
                 break;
 
             case "removeRPG7MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.RPG7, (short)request.Quantity, 2),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.RPG7, (short)request.Quantity, 2),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased RPG-7 max ammo by {request.Quantity}."));
                 break;
 
             case "addXM16E1MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.XM16E1, (short)request.Quantity, 21),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.XM16E1, (short)request.Quantity, 21),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased XM16E1 max ammo by {request.Quantity}."));
                 break;
 
             case "removeXM16E1MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.XM16E1, (short)request.Quantity, 21),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.XM16E1, (short)request.Quantity, 21),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased XM16E1 max ammo by {request.Quantity}."));
                 break;
 
             case "addAK47MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.AK47, (short)request.Quantity, 31),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.AK47, (short)request.Quantity, 31),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased AK47 max ammo by {request.Quantity}."));
                 break;
 
             case "removeAK47MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.AK47, (short)request.Quantity, 31),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.AK47, (short)request.Quantity, 31),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased AK47 max ammo by {request.Quantity}."));
                 break;
 
             case "addScorpionMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.Scorpion, (short)request.Quantity, 31),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Scorpion, (short)request.Quantity, 31),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased Scorpion max ammo by {request.Quantity}."));
                 break;
 
             case "removeScorpionMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.Scorpion, (short)request.Quantity, 31),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Scorpion, (short)request.Quantity, 31),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased Scorpion max ammo by {request.Quantity}."));
                 break;
 
             case "addM63MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.M63, (short)request.Quantity, 50),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.M63, (short)request.Quantity, 50),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased M63 max ammo by {request.Quantity}."));
                 break;
 
             case "removeM63MaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.M63, (short)request.Quantity, 50),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.M63, (short)request.Quantity, 50),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased M63 max ammo by {request.Quantity}."));
                 break;
 
             case "addGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.Grenade, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Grenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased grenade max ammo by {request.Quantity}."));
                 break;
 
             case "removeGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.Grenade, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Grenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased grenade max ammo by {request.Quantity}."));
                 break;
 
             case "addWpGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.WpGrenade, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.WpGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased WP grenade max ammo by {request.Quantity}."));
                 break;
 
             case "removeWpGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.WpGrenade, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.WpGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased WP grenade max ammo by {request.Quantity}."));
                 break;
 
             case "addStunGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.StunGrenade, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.StunGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased stun grenade max ammo by {request.Quantity}."));
                 break;
 
             case "removeStunGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.StunGrenade, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.StunGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased stun grenade max ammo by {request.Quantity}."));
                 break;
 
             case "addChaffGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.ChaffGrenade, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.ChaffGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased chaff grenade max ammo by {request.Quantity}."));
                 break;
 
             case "removeChaffGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.ChaffGrenade, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.ChaffGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased chaff grenade max ammo by {request.Quantity}."));
                 break;
 
             case "addSmokeGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.SmokeGrenade, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.SmokeGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased smoke grenade max ammo by {request.Quantity}."));
                 break;
 
             case "removeSmokeGrenadeMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.SmokeGrenade, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.SmokeGrenade, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased smoke grenade max ammo by {request.Quantity}."));
                 break;
 
             case "addEmptyMagazineMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.EmptyMagazine, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.EmptyMagazine, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased empty magazine max ammo by {request.Quantity}."));
                 break;
 
             case "removeEmptyMagazineMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.EmptyMagazine, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.EmptyMagazine, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased empty magazine max ammo by {request.Quantity}."));
                 break;
 
             case "addTntMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.TNT, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.TNT, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased TNT max ammo by {request.Quantity}."));
                 break;
 
             case "removeTntMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.TNT, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.TNT, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased TNT max ammo by {request.Quantity}."));
                 break;
 
             case "addClaymoreMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.Claymore, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Claymore, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased claymore max ammo by {request.Quantity}."));
                 break;
 
             case "removeClaymoreMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.Claymore, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Claymore, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased claymore max ammo by {request.Quantity}."));
                 break;
 
             case "addBookMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.Book, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Book, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased book max ammo by {request.Quantity}."));
                 break;
 
             case "removeBookMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.Book, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Book, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased book max ammo by {request.Quantity}."));
                 break;
 
             case "addMousetrapMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.Mousetrap, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Mousetrap, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased mousetrap max ammo by {request.Quantity}."));
                 break;
 
             case "removeMousetrapMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.Mousetrap, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Mousetrap, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased mousetrap max ammo by {request.Quantity}."));
                 break;
 
             case "addCigSprayMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.CigSpray, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.CigSpray, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased cig spray max ammo by {request.Quantity}."));
                 break;
 
             case "removeCigSprayMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.CigSpray, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.CigSpray, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased cig spray max ammo by {request.Quantity}."));
                 break;
 
             case "addHandkerchiefMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => AddMaxAmmoToWeapon(MGS3UsableObjects.Handkerchief, (short)request.Quantity, 1),
+                    () => AddMaxAmmoToWeapon(MetalGearSolidDeltaUsableObjects.Handkerchief, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} increased handkerchief max ammo by {request.Quantity}."));
                 break;
 
             case "removeHandkerchiefMaxAmmo":
                 TryEffect(request,
                     () => true,
-                    () => RemoveMaxAmmoFromWeapon(MGS3UsableObjects.Handkerchief, (short)request.Quantity, 1),
+                    () => RemoveMaxAmmoFromWeapon(MetalGearSolidDeltaUsableObjects.Handkerchief, (short)request.Quantity, 1),
                     () => Connector.SendMessage($"{request.DisplayViewer} decreased handkerchief max ammo by {request.Quantity}."));
                 break;
 
@@ -4477,9 +4477,9 @@ public class MGS3 : InjectEffectPack
                         return;
                     }
 
-                    if (currentWeapon != MGS3UsableObjects.M1911A1 &&
-                        currentWeapon != MGS3UsableObjects.MK22 &&
-                        currentWeapon != MGS3UsableObjects.XM16E1)
+                    if (currentWeapon != MetalGearSolidDeltaUsableObjects.M1911A1 &&
+                        currentWeapon != MetalGearSolidDeltaUsableObjects.MK22 &&
+                        currentWeapon != MetalGearSolidDeltaUsableObjects.XM16E1)
                     {
                         Respond(request, EffectStatus.FailTemporary, StandardErrors.PrerequisiteNotFound, "A weapon with a suppressor");
                         return;
@@ -4496,9 +4496,9 @@ public class MGS3 : InjectEffectPack
                         {
                             Weapon weapon = GetCurrentEquippedWeapon();
                             if (weapon is { HasSuppressor: true } &&
-                                (weapon == MGS3UsableObjects.M1911A1 ||
-                                 weapon == MGS3UsableObjects.MK22 ||
-                                 weapon == MGS3UsableObjects.XM16E1))
+                                (weapon == MetalGearSolidDeltaUsableObjects.M1911A1 ||
+                                 weapon == MetalGearSolidDeltaUsableObjects.MK22 ||
+                                 weapon == MetalGearSolidDeltaUsableObjects.XM16E1))
                             {
                                 AddressChain suppressorAddress = weapon.GetPropertyAddress(baseWeaponAddress, WeaponAddresses.SuppressorToggleOffset);
                                 // Force the suppressor off.
@@ -4902,14 +4902,14 @@ public class MGS3 : InjectEffectPack
                     return;
                 }
 
-                AddressChain currentAddress = MGS3UsableObjects.LifeMedicine.GetPropertyAddress(baseItemAddress, ItemAddresses.CurrentCapacityOffset);
-                AddressChain maxAddress = MGS3UsableObjects.LifeMedicine.GetPropertyAddress(baseItemAddress, ItemAddresses.MaxCapacityOffset);
+                AddressChain currentAddress = MetalGearSolidDeltaUsableObjects.LifeMedicine.GetPropertyAddress(baseItemAddress, ItemAddresses.CurrentCapacityOffset);
+                AddressChain maxAddress = MetalGearSolidDeltaUsableObjects.LifeMedicine.GetPropertyAddress(baseItemAddress, ItemAddresses.MaxCapacityOffset);
 
                 Log.Message($"Life Medicine Current Address: {currentAddress}");
                 Log.Message($"Life Medicine Max Address: {maxAddress}");
 
-                short currentValue = GetItemValue(MGS3UsableObjects.LifeMedicine);
-                short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.LifeMedicine);
+                short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.LifeMedicine);
+                short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.LifeMedicine);
                 Log.Message($"Life Medicine - Current: {currentValue}, Max: {maxCapacity}");
 
                 if ((currentValue + request.Quantity) > maxCapacity)
@@ -4925,19 +4925,19 @@ public class MGS3 : InjectEffectPack
                     {
                         short newValue = (short)(currentValue + request.Quantity);
                         Log.Message($"Attempting to set Life Medicine from {currentValue} to {newValue}");
-                        SetItemValue(MGS3UsableObjects.LifeMedicine, newValue);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.LifeMedicine, newValue);
 
                         // Verify the write was successful
-                        short verifyValue = GetItemValue(MGS3UsableObjects.LifeMedicine);
+                        short verifyValue = GetItemValue(MetalGearSolidDeltaUsableObjects.LifeMedicine);
                         Log.Message($"After setting - Value: {verifyValue}");
 
                         return verifyValue == newValue;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} life med(s). Snake now has {GetItemValue(MGS3UsableObjects.LifeMedicine)} life med(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} life med(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.LifeMedicine)} life med(s)."));
                 break;
 
             case "giveScope":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.Binoculars) == 1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Binoculars) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -4946,15 +4946,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Binoculars);
-                        SetItemValue(MGS3UsableObjects.Binoculars, (short)(currentValue + 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Binoculars);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.Binoculars, (short)(currentValue + 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake a scope."));
                 break;
 
             case "removeScope":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.Binoculars) == 0) || (GetItemValue(MGS3UsableObjects.Binoculars) == -1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Binoculars) == 0) || (GetItemValue(MetalGearSolidDeltaUsableObjects.Binoculars) == -1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -4963,15 +4963,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Binoculars);
-                        SetItemValue(MGS3UsableObjects.Binoculars, (short)(currentValue = 0));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Binoculars);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.Binoculars, (short)(currentValue = 0));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} removed a cigar from Snake, guess he is quitting smoking early."));
                 break;
 
             case "giveThermalGoggles":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.ThermalGoggles) == 1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.ThermalGoggles) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -4980,15 +4980,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.ThermalGoggles);
-                        SetItemValue(MGS3UsableObjects.ThermalGoggles, (short)(currentValue + 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.ThermalGoggles);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.ThermalGoggles, (short)(currentValue + 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake thermal goggles."));
                 break;
 
             case "removeThermalGoggles":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.ThermalGoggles) == 0) || (GetItemValue(MGS3UsableObjects.ThermalGoggles) == -1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.ThermalGoggles) == 0) || (GetItemValue(MetalGearSolidDeltaUsableObjects.ThermalGoggles) == -1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -4997,15 +4997,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.ThermalGoggles);
-                        SetItemValue(MGS3UsableObjects.ThermalGoggles, (short)(currentValue - 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.ThermalGoggles);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.ThermalGoggles, (short)(currentValue - 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} removed thermal goggles from Snake."));
                 break;
 
             case "giveNightVisionGoggles":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.NightVisionGoggles) == 1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.NightVisionGoggles) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5014,15 +5014,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.NightVisionGoggles);
-                        SetItemValue(MGS3UsableObjects.NightVisionGoggles, (short)(currentValue + 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.NightVisionGoggles);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.NightVisionGoggles, (short)(currentValue + 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake night vision goggles."));
                 break;
 
             case "removeNightVisionGoggles":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.NightVisionGoggles) == 0) || (GetItemValue(MGS3UsableObjects.NightVisionGoggles) == -1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.NightVisionGoggles) == 0) || (GetItemValue(MetalGearSolidDeltaUsableObjects.NightVisionGoggles) == -1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5031,15 +5031,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.NightVisionGoggles);
-                        SetItemValue(MGS3UsableObjects.NightVisionGoggles, (short)(currentValue - 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.NightVisionGoggles);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.NightVisionGoggles, (short)(currentValue - 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} removed night vision goggles from Snake."));
                 break;
 
             case "giveMotionDetector":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.MotionDetector) == 1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.MotionDetector) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5048,15 +5048,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.MotionDetector);
-                        SetItemValue(MGS3UsableObjects.MotionDetector, (short)(currentValue + 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.MotionDetector);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.MotionDetector, (short)(currentValue + 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake a motion detector."));
                 break;
 
             case "removeMotionDetector":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.MotionDetector) == 0) || (GetItemValue(MGS3UsableObjects.MotionDetector) == -1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.MotionDetector) == 0) || (GetItemValue(MetalGearSolidDeltaUsableObjects.MotionDetector) == -1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5065,15 +5065,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.MotionDetector);
-                        SetItemValue(MGS3UsableObjects.MotionDetector, (short)(currentValue - 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.MotionDetector);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.MotionDetector, (short)(currentValue - 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} removed a motion detector from Snake."));
                 break;
 
             case "giveSonar":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.ActiveSonar) == 1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.ActiveSonar) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5082,15 +5082,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.ActiveSonar);
-                        SetItemValue(MGS3UsableObjects.ActiveSonar, (short)(currentValue + 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.ActiveSonar);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.ActiveSonar, (short)(currentValue + 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake a sonar."));
                 break;
 
             case "removeSonar":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.ActiveSonar) == 0) || (GetItemValue(MGS3UsableObjects.ActiveSonar) == -1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.ActiveSonar) == 0) || (GetItemValue(MetalGearSolidDeltaUsableObjects.ActiveSonar) == -1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5099,15 +5099,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.ActiveSonar);
-                        SetItemValue(MGS3UsableObjects.ActiveSonar, (short)(currentValue - 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.ActiveSonar);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.ActiveSonar, (short)(currentValue - 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} removed a sonar from Snake."));
                 break;
 
             case "giveAntiPersonnelSensor":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.AntiPersonnelSensor) == 1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.AntiPersonnelSensor) == 1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5116,15 +5116,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.AntiPersonnelSensor);
-                        SetItemValue(MGS3UsableObjects.AntiPersonnelSensor, (short)(currentValue + 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.AntiPersonnelSensor);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.AntiPersonnelSensor, (short)(currentValue + 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} gave Snake an anti-personnel sensor."));
                 break;
 
             case "removeAntiPersonnelSensor":
-                if (IsInCutscene() || (GetItemValue(MGS3UsableObjects.AntiPersonnelSensor) == 0) || (GetItemValue(MGS3UsableObjects.AntiPersonnelSensor) == -1))
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.AntiPersonnelSensor) == 0) || (GetItemValue(MetalGearSolidDeltaUsableObjects.AntiPersonnelSensor) == -1))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5133,15 +5133,15 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.AntiPersonnelSensor);
-                        SetItemValue(MGS3UsableObjects.AntiPersonnelSensor, (short)(currentValue - 1));
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.AntiPersonnelSensor);
+                        SetItemValue(MetalGearSolidDeltaUsableObjects.AntiPersonnelSensor, (short)(currentValue - 1));
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} removed an anti-personnel sensor from Snake."));
                 break;
 
             case "giveAntidote":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.Antidote) <= GetItemValue(MGS3UsableObjects.Antidote)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Antidote) <= GetItemValue(MetalGearSolidDeltaUsableObjects.Antidote)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5150,25 +5150,25 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Antidote);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.Antidote);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Antidote);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Antidote);
 
                         // Prevent exceeding max capacity
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.Antidote, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Antidote, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Antidote, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Antidote, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} antidote(s). Snake now has {GetItemValue(MGS3UsableObjects.Antidote)} antidote(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} antidote(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Antidote)} antidote(s)."));
                 break;
 
             case "removeAntidote":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.Antidote) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Antidote) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5177,24 +5177,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Antidote);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Antidote);
 
                         // Prevent going below 0
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.Antidote, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Antidote, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Antidote, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Antidote, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} antidote(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.Antidote)} antidote(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} antidote(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Antidote)} antidote(s)."));
                 break;
 
             case "giveCMed":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.ColdMedicine) <= GetItemValue(MGS3UsableObjects.ColdMedicine)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.ColdMedicine) <= GetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5203,24 +5203,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.ColdMedicine);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.ColdMedicine);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.ColdMedicine);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.ColdMedicine, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.ColdMedicine, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} C Med(s). Snake now has {GetItemValue(MGS3UsableObjects.ColdMedicine)} C Med(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} C Med(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine)} C Med(s)."));
                 break;
 
             case "removeCMed":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.ColdMedicine) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5229,24 +5229,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.ColdMedicine);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.ColdMedicine, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.ColdMedicine, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} C Med(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.ColdMedicine)} C Med(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} C Med(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.ColdMedicine)} C Med(s)."));
                 break;
 
 
             case "giveDMed":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.DigestiveMedicine) <= GetItemValue(MGS3UsableObjects.DigestiveMedicine)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.DigestiveMedicine) <= GetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5255,24 +5255,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.DigestiveMedicine);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.DigestiveMedicine);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.DigestiveMedicine);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.DigestiveMedicine, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.DigestiveMedicine, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} D Med(s). Snake now has {GetItemValue(MGS3UsableObjects.DigestiveMedicine)} D Med(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} D Med(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine)} D Med(s)."));
                 break;
 
             case "removeDMed":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.DigestiveMedicine) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5281,23 +5281,23 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.DigestiveMedicine);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.DigestiveMedicine, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.DigestiveMedicine, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} D Med(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.DigestiveMedicine)} D Med(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} D Med(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.DigestiveMedicine)} D Med(s)."));
                 break;
 
             case "giveSerum":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.Serum) <= GetItemValue(MGS3UsableObjects.Serum)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Serum) <= GetItemValue(MetalGearSolidDeltaUsableObjects.Serum)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5306,24 +5306,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Serum);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.Serum);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Serum);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Serum);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.Serum, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Serum, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Serum, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Serum, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} serum(s). Snake now has {GetItemValue(MGS3UsableObjects.Serum)} serum(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} serum(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Serum)} serum(s)."));
                 break;
 
             case "removeSerum":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.Serum) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Serum) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5332,23 +5332,23 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Serum);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Serum);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.Serum, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Serum, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Serum, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Serum, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} serum(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.Serum)} serum(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} serum(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Serum)} serum(s)."));
                 break;
 
             case "giveBandage":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.Bandage) <= GetItemValue(MGS3UsableObjects.Bandage)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Bandage) <= GetItemValue(MetalGearSolidDeltaUsableObjects.Bandage)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5357,24 +5357,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Bandage);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.Bandage);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Bandage);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Bandage);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.Bandage, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Bandage, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Bandage, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Bandage, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} bandage(s). Snake now has {GetItemValue(MGS3UsableObjects.Bandage)} bandage(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} bandage(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Bandage)} bandage(s)."));
                 break;
 
             case "removeBandage":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.Bandage) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Bandage) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5383,23 +5383,23 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Bandage);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Bandage);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.Bandage, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Bandage, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Bandage, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Bandage, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} bandage(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.Bandage)} bandage(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} bandage(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Bandage)} bandage(s)."));
                 break;
 
             case "giveDisinfectant":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.Disinfectant) <= GetItemValue(MGS3UsableObjects.Disinfectant)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Disinfectant) <= GetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5408,24 +5408,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Disinfectant);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.Disinfectant);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Disinfectant);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.Disinfectant, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Disinfectant, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} disinfectant(s). Snake now has {GetItemValue(MGS3UsableObjects.Disinfectant)} disinfectant(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} disinfectant(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant)} disinfectant(s)."));
                 break;
 
             case "removeDisinfectant":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.Disinfectant) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5434,23 +5434,23 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Disinfectant);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.Disinfectant, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Disinfectant, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} disinfectant(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.Disinfectant)} disinfectant(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} disinfectant(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Disinfectant)} disinfectant(s)."));
                 break;
 
             case "giveOintment":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.Ointment) <= GetItemValue(MGS3UsableObjects.Ointment)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Ointment) <= GetItemValue(MetalGearSolidDeltaUsableObjects.Ointment)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5459,24 +5459,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Ointment);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.Ointment);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Ointment);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Ointment);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.Ointment, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Ointment, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Ointment, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Ointment, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} ointment(s). Snake now has {GetItemValue(MGS3UsableObjects.Ointment)} ointment(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} ointment(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Ointment)} ointment(s)."));
                 break;
 
             case "removeOintment":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.Ointment) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Ointment) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5485,23 +5485,23 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Ointment);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Ointment);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.Ointment, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Ointment, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Ointment, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Ointment, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ointment(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.Ointment)} ointment(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} ointment(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Ointment)} ointment(s)."));
                 break;
 
             case "giveSplint":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.Splint) <= GetItemValue(MGS3UsableObjects.Splint)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Splint) <= GetItemValue(MetalGearSolidDeltaUsableObjects.Splint)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5510,24 +5510,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Splint);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.Splint);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Splint);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Splint);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.Splint, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Splint, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Splint, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Splint, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} splint(s). Snake now has {GetItemValue(MGS3UsableObjects.Splint)} splint(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} splint(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Splint)} splint(s)."));
                 break;
 
             case "removeSplint":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.Splint) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Splint) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5536,23 +5536,23 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Splint);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Splint);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.Splint, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Splint, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Splint, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Splint, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} splint(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.Splint)} splint(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} splint(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Splint)} splint(s)."));
                 break;
 
             case "giveStyptic":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.Styptic) <= GetItemValue(MGS3UsableObjects.Styptic)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Styptic) <= GetItemValue(MetalGearSolidDeltaUsableObjects.Styptic)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5561,24 +5561,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Styptic);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.Styptic);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Styptic);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.Styptic);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.Styptic, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Styptic, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Styptic, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Styptic, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} styptic(s). Snake now has {GetItemValue(MGS3UsableObjects.Styptic)} styptic(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} styptic(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Styptic)} styptic(s)."));
                 break;
 
             case "removeStyptic":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.Styptic) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.Styptic) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5587,23 +5587,23 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.Styptic);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.Styptic);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.Styptic, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Styptic, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.Styptic, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.Styptic, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} styptic(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.Styptic)} styptic(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} styptic(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.Styptic)} styptic(s)."));
                 break;
 
             case "giveSutureKit":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MGS3UsableObjects.SutureKit) <= GetItemValue(MGS3UsableObjects.SutureKit)))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.SutureKit) <= GetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit)))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5612,24 +5612,24 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.SutureKit);
-                        short maxCapacity = GetItemMaxCapacity(MGS3UsableObjects.SutureKit);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit);
+                        short maxCapacity = GetItemMaxCapacity(MetalGearSolidDeltaUsableObjects.SutureKit);
 
                         if ((currentValue + request.Quantity) > maxCapacity)
                         {
-                            SetItemValue(MGS3UsableObjects.SutureKit, maxCapacity);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit, maxCapacity);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.SutureKit, (short)(currentValue + request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit, (short)(currentValue + request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} suture kit(s). Snake now has {GetItemValue(MGS3UsableObjects.SutureKit)} suture kit(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} suture kit(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit)} suture kit(s)."));
                 break;
 
             case "removeSutureKit":
-                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MGS3UsableObjects.SutureKit) == 0))
+                if (IsInCutscene() || !IsMedicalItemEffectsAllowed() || (GetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit) == 0))
                 {
                     DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
                     return;
@@ -5638,19 +5638,19 @@ public class MGS3 : InjectEffectPack
                     () => true,
                     () =>
                     {
-                        short currentValue = GetItemValue(MGS3UsableObjects.SutureKit);
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit);
 
                         if ((currentValue - request.Quantity) < 0)
                         {
-                            SetItemValue(MGS3UsableObjects.SutureKit, 0);
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit, 0);
                         }
                         else
                         {
-                            SetItemValue(MGS3UsableObjects.SutureKit, (short)(currentValue - request.Quantity));
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit, (short)(currentValue - request.Quantity));
                         }
                         return true;
                     },
-                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} suture kit(s) from Snake, he now has {GetItemValue(MGS3UsableObjects.SutureKit)} suture kit(s)."));
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} suture kit(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.SutureKit)} suture kit(s)."));
                 break;
 
             #endregion
