@@ -70,6 +70,11 @@ public class MetalGearSolidDelta : InjectEffectPack
     private AddressChain lightColourG;
     private AddressChain lightColourB;
     private AddressChain lightColourA;
+    private AddressChain extraLightColourInstructions;
+    private AddressChain extraLightColourR;
+    private AddressChain extraLightColourG;
+    private AddressChain extraLightColourB;
+    private AddressChain extraLightColourA;
     private AddressChain fogFilter;
 
     // Guard Health, Sleep & Stun Statues
@@ -157,6 +162,12 @@ public class MetalGearSolidDelta : InjectEffectPack
         lightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483904");
         lightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483908");
         lightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1448390C");
+
+        extraLightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2BA311F");
+        extraLightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483910");
+        extraLightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483914");
+        extraLightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483918");
+        extraLightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1448391C");
 
         fogFilter = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+267C09F");
 
@@ -1813,7 +1824,13 @@ public class MetalGearSolidDelta : InjectEffectPack
         float lightColourRValue,
         float lightColourGValue,
         float lightColourBValue,
-        float lightColourAValue
+        float lightColourAValue,
+
+        byte[] extraLightColourInstructionsValue,
+        float extraLightColourRValue,
+        float extraLightColourGValue,
+        float extraLightColourBValue,
+        float extraLightColourAValue
 
         )
     {
@@ -1828,6 +1845,54 @@ public class MetalGearSolidDelta : InjectEffectPack
         SetFloat(lightColourG, lightColourGValue);
         SetFloat(lightColourB, lightColourBValue);
         SetFloat(lightColourA, lightColourAValue);
+
+        SetArray(extraLightColourInstructions, extraLightColourInstructionsValue);
+        SetFloat(extraLightColourR, extraLightColourRValue);
+        SetFloat(extraLightColourG, extraLightColourGValue);
+        SetFloat(extraLightColourB, extraLightColourBValue);
+        SetFloat(extraLightColourA, extraLightColourAValue);
+    }
+
+    public void SetNormalFilters()
+    {
+        byte[] filterInstructionsValue = new byte[] {
+        0xF3, 0x0F, 0x11, 0x9B, 0x00, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x93, 0x04, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x8B, 0x08, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x83, 0x0C, 0x01, 0x00, 0x00
+    };
+
+        byte[] lightColourInstructionsValue = new byte[] {
+        0xF3, 0x0F, 0x11, 0x9B, 0x10, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x93, 0x14, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x8B, 0x18, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x83, 0x1C, 0x01, 0x00, 0x00
+    };
+
+        byte[] extraLightColourInstructionsValue = new byte[] {
+        0xF3, 0x0F, 0x11, 0x9B, 0x20, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x93, 0x24, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x8B, 0x28, 0x01, 0x00, 0x00,
+        0xF3, 0x0F, 0x11, 0x83, 0x2C, 0x01, 0x00, 0x00
+    };
+
+        SetFilterValues(
+            filterInstructionsValue,
+            3.0f,    // filterRValue
+            3.0f,    // filterGValue  
+            3.0f,   // filterBValue
+            3.0f,    // filterAValue
+            lightColourInstructionsValue,
+            3.0f,
+            3.0f,
+            3.0f,
+            3.0f,
+            extraLightColourInstructionsValue,
+            3.0f,
+            3.0f,
+            3.0f,
+            3.0f
+        );
     }
 
     public void SetToPissFilterMode()
@@ -1846,6 +1911,13 @@ public class MetalGearSolidDelta : InjectEffectPack
         0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
     };
 
+        byte[] extraLightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
         SetFilterValues(
             filterInstructionsValue,
             2.0f,    // filterRValue
@@ -1853,10 +1925,225 @@ public class MetalGearSolidDelta : InjectEffectPack
             2.0f,    // filterBValue
             0.7f,    // filterAValue
             lightColourInstructionsValue,
-            1.0f,    // lightColourRValue
-            1.0f,    // lightColourGValue
-            2.0f,    // lightColourBValue
-            0.9f     // lightColourAValue
+            1.0f,
+            1.0f,
+            2.0f,
+            0.9f,
+            extraLightColourInstructionsValue,
+            1.0f,
+            1.0f,
+            0.9f,
+            1.1f
+        );
+    }
+
+    public void SetToBleachBypassFilterMode()
+    {
+        byte[] filterInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] lightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] extraLightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        SetFilterValues(
+            filterInstructionsValue,
+            0.47f,    // filterRValue
+            0.4f,    // filterGValue  
+            0.4f,    // filterBValue
+            1.0f,    // filterAValue
+            lightColourInstructionsValue,
+            1.45f,
+            1.45f,
+            1.45f,
+            1.0f,
+            extraLightColourInstructionsValue,
+            0.89f,
+            0.89f,
+            0.89f,
+            0.89f
+        );
+    }
+
+    public void SetToActionMovieFilterMode()
+    {
+        byte[] filterInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] lightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] extraLightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        SetFilterValues(
+            filterInstructionsValue,
+            0.77f,    // filterRValue
+            0.77f,    // filterGValue  
+            0.77f,    // filterBValue
+            1.0f,    // filterAValue
+            lightColourInstructionsValue,
+            1.18f,
+            1.18f,
+            1.18f,
+            1.8f,
+            extraLightColourInstructionsValue,
+            0.87f,
+            0.87f,
+            0.87f,
+            1.5f
+        );
+    }
+
+    public void SetToRetroBrownFilterMode()
+    {
+        byte[] filterInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] lightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] extraLightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        SetFilterValues(
+            filterInstructionsValue,
+            0.68f,    // filterRValue
+            0.68f,    // filterGValue  
+            0.6f,    // filterBValue
+            1.0f,    // filterAValue
+            lightColourInstructionsValue,
+            1.0f,
+            1.2f,
+            1.9f,
+            2.2f,
+            extraLightColourInstructionsValue,
+            0.87f,
+            0.83f,
+            1.0f,
+            1.8f
+        );
+    }
+
+    public void SetToVioletDarknessFilterMode()
+    {
+        byte[] filterInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] lightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] extraLightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        SetFilterValues(
+            filterInstructionsValue,
+            0.68f,    // filterRValue
+            0.68f,    // filterGValue  
+            0.68f,    // filterBValue
+            1.0f,    // filterAValue
+            lightColourInstructionsValue,
+            1.3f,
+            1.3f,
+            1.3f,
+            1.0f,
+            extraLightColourInstructionsValue,
+            0.87f,
+            0.83f,
+            1.0f,
+            1.0f
+        );
+    }
+
+    public void SetToLaNoireFilterMode()
+    {
+        byte[] filterInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] lightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        byte[] extraLightColourInstructionsValue = new byte[] {
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
+        0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+    };
+
+        SetFilterValues(
+            filterInstructionsValue,
+            0.0f,    // filterRValue
+            0.0f,    // filterGValue  
+            0.0f,    // filterBValue
+            0.0f,    // filterAValue
+            lightColourInstructionsValue,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f,
+            extraLightColourInstructionsValue,
+            1.0f,
+            1.0f,
+            1.0f,
+            1.0f
         );
     }
 
@@ -2300,30 +2587,72 @@ public class MetalGearSolidDelta : InjectEffectPack
     
     new ("Remove Fog", "removeFog")
     {
-        Price = 10,
+        Price = 1,
         Description = "Removes fog from the game for better visibility",
         Category = "Filters and Visuals"
     },
 
     new ("Restore Fog", "restoreFog")
     {
-        Price = 10,
+        Price = 1,
         Description = "Restores fog effects to the game",
         Category = "Filters and Visuals"
     },
 
+    new ("Default Filter", "setNormalFilter")
+        {
+        Price = 1,
+        Description = "Restore the game's default filter.",
+        Category = "Filters and Visuals"
+        },
+
     new ("ANTIBigBoss's Homebrewed Piss Filter", "setPissFilter")
         {
-        Price = 10,
+        Price = 1,
         Description = "Go back to 2004 with that piss stained filter every PS2 era game had.",
         Category = "Filters and Visuals"
         },
 
+    new ("Bleach Bypass", "setBleachBypass")
+        {
+        Price = 1,
+        Description = "Apply a Bleach Bypass to the game",
+        Category = "Filters and Visuals"
+        },
+
+    new ("Action Movie Filter", "setActionMovieFilter")
+        {
+        Price = 1,
+        Description = "Apply a gritty action movie-style filter to the game.",
+        Category = "Filters and Visuals"
+        },
+
+    new ("Retro Brown Filter", "setRetroBrownFilter")
+        {
+            Price = 1,
+            Description = "Apply a Retro Brown filter for a vintage look.",
+            Category = "Filters and Visuals"
+        },
+
+    new ("Violet Darkness Filter", "setVioletDarknessFilter")
+        {
+            Price = 1,
+            Description = "Apply a dark violet-toned filter for a mysterious atmosphere.",
+            Category = "Filters and Visuals"
+        },
+
+    new ("LA Noire", "setLaNoireFilter")
+        {
+            Price = 1,
+            Description = "Apply a black and white filter which Konami calls Monochrome but we know LA Noire is a better name.",
+            Category = "Filters and Visuals"
+        },    
+
         #endregion
 
-    #region Weapons
-    
-    new ("Remove Survival Knife", "removeSurvivalKnife")
+        #region Weapons
+
+        new ("Remove Survival Knife", "removeSurvivalKnife")
         {
         Price = 30,
         Duration = 30,
@@ -3328,6 +3657,54 @@ public class MetalGearSolidDelta : InjectEffectPack
         Description = "Take away Snake's anti-personnel sensor which will stop him from detecting enemy movement",
         Category = "Items",
         Image = "remove_item"
+        },
+
+    new ("Give Suppressor - M1911A1", "giveM1911A1Suppressor")
+        {
+            Price = 100,
+            Quantity = 10,
+            Description = "Add suppressor durability for the M1911A1 pistol. Each purchase adds 30 durability points.",
+            Category = "Items",
+        },
+
+    new ("Remove Suppressor - M1911A1", "removeM1911A1Suppressor")
+        {
+            Price = 100,
+            Quantity = 10,
+            Description = "Remove suppressor durability for the M1911A1 pistol. Each purchase removes 30 durability points.",
+            Category = "Items",
+        },
+
+    new ("Give Suppressor - MK22", "giveMK22Suppressor")
+        {
+            Price = 100,
+            Quantity = 10,
+            Description = "Add suppressor durability for the MK22 tranquilizer pistol. Each purchase adds 30 durability points.",
+            Category = "Items",
+        },
+
+    new ("Remove Suppressor - MK22", "removeMK22Suppressor")
+        {
+            Price = 100,
+            Quantity = 10,
+            Description = "Remove suppressor durability for the MK22 tranquilizer pistol. Each purchase removes 30 durability points.",
+            Category = "Items",
+        },
+
+    new ("Give Suppressor - XM16E1", "giveXM16E1Suppressor")
+        {
+            Price = 100,
+            Quantity = 10,
+            Description = "Add suppressor durability for the XM16E1 assault rifle. Each purchase adds 30 durability points.",
+            Category = "Items",
+        },
+
+    new ("Remove Suppressor - XM16E1", "removeXM16E1Suppressor")
+        {
+            Price = 100,
+            Quantity = 10,
+            Description = "Remove suppressor durability for the XM16E1 assault rifle. Each purchase removes 30 durability points.",
+            Category = "Items"
         },
 
     new ("Give Antidote", "giveAntidote")
@@ -4877,6 +5254,20 @@ public class MetalGearSolidDelta : InjectEffectPack
                     () => Connector.SendMessage($"{request.DisplayViewer} restored the fog."));
                 break;
 
+            case "setNormalFilter":
+                {
+
+                    TryEffect(request,
+                        () => true,
+                        () =>
+                        {
+                            SetNormalFilters();
+                            return true;
+                        },
+                        () => Connector.SendMessage($"{request.DisplayViewer} changed the filter back to normal."));
+                    break;
+                }
+
             case "setPissFilter":
                 {
 
@@ -4888,6 +5279,72 @@ public class MetalGearSolidDelta : InjectEffectPack
                             return true;
                         },
                         () => Connector.SendMessage($"{request.DisplayViewer} made everyone look at the game through piss."));
+                    break;
+                }
+
+            case "setBleachBypass":
+                {
+
+                    TryEffect(request,
+                        () => true,
+                        () =>
+                        {
+                            SetToBleachBypassFilterMode();
+                            return true;
+                        },
+                        () => Connector.SendMessage($"{request.DisplayViewer} changed the filter to Bleach Bypass."));
+                    break;
+                }
+
+            case "setActionMovieFilter":
+                {
+                    TryEffect(request,
+                        () => true,
+                        () =>
+                        {
+                            SetToActionMovieFilterMode();
+                            return true;
+                        },
+                        () => Connector.SendMessage($"{request.DisplayViewer} applied an action movie filter."));
+                    break;
+                }
+
+            case "setRetroBrownFilter":
+                {
+                    TryEffect(request,
+                        () => true,
+                        () =>
+                        {
+                            SetToRetroBrownFilterMode();
+                            return true;
+                        },
+                        () => Connector.SendMessage($"{request.DisplayViewer} applied a brown bypass filter."));
+                    break;
+                }
+
+            case "setVioletDarknessFilter":
+                {
+                    TryEffect(request,
+                        () => true,
+                        () =>
+                        {
+                            SetToVioletDarknessFilterMode();
+                            return true;
+                        },
+                        () => Connector.SendMessage($"{request.DisplayViewer} applied a violet darkness filter."));
+                    break;
+                }
+
+            case "setLaNoireFilter":
+                {
+                    TryEffect(request,
+                        () => true,
+                        () =>
+                        {
+                            SetToLaNoireFilterMode();
+                            return true;
+                        },
+                        () => Connector.SendMessage($"{request.DisplayViewer} applied a violet darkness filter."));
                     break;
                 }
 
@@ -5138,6 +5595,165 @@ public class MetalGearSolidDelta : InjectEffectPack
                         return true;
                     },
                     () => Connector.SendMessage($"{request.DisplayViewer} removed an anti-personnel sensor from Snake."));
+                break;
+
+            case "giveM1911A1Suppressor":
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor) >= 999))
+                {
+                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
+                    return;
+                }
+                TryEffect(request,
+                    () => true,
+                    () =>
+                    {
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor);
+                        short maxCapacity = 999;
+                        short incrementAmount = (short)(30 * request.Quantity);
+
+                        if ((currentValue + incrementAmount) > maxCapacity)
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor, maxCapacity);
+                        }
+                        else
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor, (short)(currentValue + incrementAmount));
+                        }
+                        return true;
+                    },
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} M1911A1 suppressor(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor)} durability."));
+                break;
+
+            case "removeM1911A1Suppressor":
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor) == 0))
+                {
+                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
+                    return;
+                }
+                TryEffect(request,
+                    () => true,
+                    () =>
+                    {
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor);
+                        short decrementAmount = (short)(30 * request.Quantity);
+
+                        if ((currentValue - decrementAmount) < 0)
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor, 0);
+                        }
+                        else
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor, (short)(currentValue - decrementAmount));
+                        }
+                        return true;
+                    },
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} M1911A1 suppressor(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.M1911A1Suppressor)} durability."));
+                break;
+
+            case "giveMK22Suppressor":
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor) >= 999))
+                {
+                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
+                    return;
+                }
+                TryEffect(request,
+                    () => true,
+                    () =>
+                    {
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor);
+                        short maxCapacity = 999;
+                        short incrementAmount = (short)(30 * request.Quantity);
+
+                        if ((currentValue + incrementAmount) > maxCapacity)
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor, maxCapacity);
+                        }
+                        else
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor, (short)(currentValue + incrementAmount));
+                        }
+                        return true;
+                    },
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} MK22 suppressor(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor)} durability."));
+                break;
+
+            case "removeMK22Suppressor":
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor) == 0))
+                {
+                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
+                    return;
+                }
+                TryEffect(request,
+                    () => true,
+                    () =>
+                    {
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor);
+                        short decrementAmount = (short)(30 * request.Quantity);
+
+                        if ((currentValue - decrementAmount) < 0)
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor, 0);
+                        }
+                        else
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor, (short)(currentValue - decrementAmount));
+                        }
+                        return true;
+                    },
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} MK22 suppressor(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.MK22Suppressor)} durability."));
+                break;
+
+            case "giveXM16E1Suppressor":
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor) >= 999))
+                {
+                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
+                    return;
+                }
+                TryEffect(request,
+                    () => true,
+                    () =>
+                    {
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor);
+                        short maxCapacity = 999;
+                        short incrementAmount = (short)(30 * request.Quantity);
+
+                        if ((currentValue + incrementAmount) > maxCapacity)
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor, maxCapacity);
+                        }
+                        else
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor, (short)(currentValue + incrementAmount));
+                        }
+                        return true;
+                    },
+                    () => Connector.SendMessage($"{request.DisplayViewer} gave Snake {request.Quantity} XM16E1 suppressor(s). Snake now has {GetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor)} durability."));
+                break;
+
+            case "removeXM16E1Suppressor":
+                if (IsInCutscene() || (GetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor) == 0))
+                {
+                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
+                    return;
+                }
+                TryEffect(request,
+                    () => true,
+                    () =>
+                    {
+                        short currentValue = GetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor);
+                        short decrementAmount = (short)(30 * request.Quantity);
+
+                        if ((currentValue - decrementAmount) < 0)
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor, 0);
+                        }
+                        else
+                        {
+                            SetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor, (short)(currentValue - decrementAmount));
+                        }
+                        return true;
+                    },
+                    () => Connector.SendMessage($"{request.DisplayViewer} removed {request.Quantity} XM16E1 suppressor(s) from Snake, he now has {GetItemValue(MetalGearSolidDeltaUsableObjects.XM16E1Suppressor)} durability."));
                 break;
 
             case "giveAntidote":
