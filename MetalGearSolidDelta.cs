@@ -5,7 +5,7 @@ using CrowdControl.Common;
 using AddressChain = ConnectorLib.Memory.AddressChain<ConnectorLib.Inject.InjectConnector>;
 using ConnectorType = CrowdControl.Common.ConnectorType;
 using Log = CrowdControl.Common.Log;
-
+ 
 namespace CrowdControl.Games.Packs.MetalGearSolidDelta;
 
 [SuppressMessage("ReSharper", "StringLiteralTypo")]
@@ -108,90 +108,90 @@ public class MetalGearSolidDelta : InjectEffectPack
 
         Connector.PointerFormat = PointerFormat.Absolute64LE;
 
-        baseWeaponAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C22A0"); // Delta uses 88 bytes between weapons
-        baseItemAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C4FF4"); // 80 Bytes between items like MC
+        baseWeaponAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135B5CA0"); // Delta uses 88 bytes between weapons
+        baseItemAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135B89F4"); // 80 Bytes between items like MC
 
         // Snake Animations to test
-        snakeTrips = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CC5FB");
-        snakePukeFire = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CC5FC");
-        snakeSleeps = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135D9BDA");
+        snakeTrips = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BFFFB");
+        snakePukeFire = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BFFFC");
+        snakeSleeps = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CD5DA");
 
         // Snake Stats
-        snakeHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+7B4");
-        snakeMaxHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+7B6");
-        snakeStamina = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+B7A");
-        snakeCommonCold = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+81A");
-        snakePoison = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+828");
-        snakeFoodPoisoning = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+836");
-        snakeHasLeeches = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+844");
-        snakeCurrentEquippedWeapon = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+704");
-        snakeCurrentEquippedItem = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+706");
+        snakeHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+7B4");
+        snakeMaxHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+7B6");
+        snakeStamina = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+B7A");
+        snakeCommonCold = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+81A");
+        snakePoison = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+828");
+        snakeFoodPoisoning = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+836");
+        snakeHasLeeches = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+844");
+        snakeCurrentEquippedWeapon = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+704");
+        snakeCurrentEquippedItem = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+706");
         // Probably not gonna use Facepaint and Camo unless I can figure out a way to force pause the game and refresh Snake's clothes
-        snakeCurrentCamo = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+7AE");
-        snakeCurrentFacePaint = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+7AF");
-        snakeDamageMultiplierInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7ADAAD1");
-        snakeDamageMultiplierValue = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7ADAAD3");
-        snakeTacticalReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A86846");
-        snakeManualReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A871A8");
-        everyoneIsDrunk = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+56F7042");
+        snakeCurrentCamo = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+7AE");
+        snakeCurrentFacePaint = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+7AF");
+        snakeDamageMultiplierInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7ACE5F1");
+        snakeDamageMultiplierValue = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7ACE5F3");
+        snakeTacticalReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A7A346");
+        snakeManualReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A79A14");
+        everyoneIsDrunk = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+56E72B2");
 
-        camoIndexInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D1689C"); // 8B 05 36 FF FF FF | Restore: 8B 05 82 9D 8B 0B
-        camoIndexInstructions2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7ABFE65 "); // 8B 05 5D 40 25 00 | Restore: 8B 05 A9 DE B0 0B
-        camoIndexValue = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D167D8"); // -1000 for -100% camo 1000 for 100% camo 4 byte value
+        camoIndexInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D0A3FC"); // 8B 05 36 FF FF FF | Restore: 8B 05 82 9D 8B 0B
+        camoIndexInstructions2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7AB3985"); // 8B 05 5D 40 25 00 | Restore: 8B 05 A9 DE B0 0B
+        camoIndexValue = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D0A338"); // -1000 for -100% camo 1000 for 100% camo 4 byte value
 
         // Game State
-        isPausedOrMenu = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135DD8EC");
-        mapStringAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C53D038=>+24");
+        isPausedOrMenu = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135D12EC");
+        mapStringAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C530038=>+24");
         restartStage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1452D620");
 
         // 16 = Alert, 32 = Caution, 0 = No Alert
-        alertStatus = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CA6C8");
-        alertTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CA674");
-        evasionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CA68C");
-        cautionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CA678");
+        alertStatus = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BE0C8");
+        alertTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BE074");
+        evasionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BE08C");
+        cautionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BE078");
 
         // Filters
-        filterInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2BA303D");
-        filterR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144838F0");
-        filterG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144838F4");
-        filterB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144838F8");
-        filterA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144838FC");
+        filterInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8D74D");
+        filterR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764A0");
+        filterG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764A4");
+        filterB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764A8");
+        filterA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764AC");
 
-        lightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2BA30A8");
-        lightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483900");
-        lightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483904");
-        lightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483908");
-        lightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1448390C");
+        lightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8D7B8");
+        lightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764B0");
+        lightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764B4");
+        lightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764B8");
+        lightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764BC");
 
-        extraLightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2BA311F");
-        extraLightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483910");
-        extraLightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483914");
-        extraLightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+14483918");
-        extraLightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1448391C");
+        extraLightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8D82F");
+        extraLightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764C0");
+        extraLightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764C4");
+        extraLightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764C8");
+        extraLightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144764CC");
 
-        fogFilter = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+267C09F");
+        fogFilter = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+26668BF");
 
         // Guard Health, Sleep & Stun Statues
         // Lethal Damage
-        snakeWeaponDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CBCFDA");
-        snakeWeaponDamageMulti = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CBCFF1");
-        flameDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CBFE36");
-        guardThroatSlitDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D210AA");
+        snakeWeaponDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB0B0A");
+        snakeWeaponDamageMulti = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB0B21");
+        flameDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB3966");
+        guardThroatSlitDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D14C0A");
 
         // Sleep Damage
-        sleepTimer1 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CC06AB");
-        sleepTimer2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CC06BD");
-        sleepTimer3 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CC06C9");
-        sleepDrain = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CC1CAF");
-        tranqHead = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CD8F64");
-        tranqBody = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CDBAAB");
+        sleepTimer1 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB41DB");
+        sleepTimer2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB41ED");
+        sleepTimer3 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB41F9");
+        sleepDrain = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB57D7");
+        tranqHead = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CCCAC4");
+        tranqBody = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CCA077");
 
         // Stun Damage
-        stunTimer1 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CBFDBB");
-        stunTimer2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CBFDCD");
-        stunTimer3 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CBFDD9");
-        stunPunch = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CD8DC8");
-        stunGrenade = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CD8706");
+        stunTimer1 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB38EB");
+        stunTimer2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB38FD");
+        stunTimer3 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB3909");
+        stunPunch = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CCC928");
+        stunGrenade = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CCC266");
 
     }
 
@@ -1305,7 +1305,12 @@ public class MetalGearSolidDelta : InjectEffectPack
         {
             byte[] currentBytes = GetArray<byte>(snakeDamageMultiplierInstructions, 62);
             byte[] expectedBytes = new byte[] {
-            0x66, 0xBD, 0x00, 0x00, 0x66, 0x0F, 0xAF, 0xC5, 0x66, 0x31, 0xED, 0xEB, 0x18, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x66, 0x89, 0x93, 0x80, 0x2F, 0x00, 0x00, 0x48, 0x8B, 0x0D, 0x34, 0x25, 0xA6, 0x04, 0x4C, 0x8D, 0x0D, 0x35, 0xD2, 0x52, 0x02, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 };
+            0x66, 0xBD, 0x00, 0x00, 0x66, 0x0F, 0xAF, 0xC5, 0x66, 0x31, 0xED, 0xEB, 0x18, 0x90, 0x90, 0x90, 
+            0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 
+            0x90, 0x90, 0x90, 0x90, 0x90, 0x66, 0x89, 0x93, 0x80, 0x2F, 0x00, 0x00, 0x48, 0x8B, 0x0D, 0x14, 
+            0x1A, 0xA6, 0x04, 0x4C, 0x8D, 0x0D, 0x15, 0xA4, 0x52, 0x02, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
+             };
+            
 
             bool needsUpdate = false;
             for (int i = 0; i < currentBytes.Length; i++)
@@ -1418,8 +1423,8 @@ public class MetalGearSolidDelta : InjectEffectPack
     {
         try
         {
-            byte[] patchedInstruction1 = new byte[] { 0x8B, 0x05, 0x36, 0xFF, 0xFF, 0xFF };
-            byte[] patchedInstruction2 = new byte[] { 0x8B, 0x05, 0x6D, 0x69, 0x25, 0x00 };
+            byte[] patchedInstruction1 = new byte[] { 0x8B, 0x05, 0xE2, 0x5B, 0x8B, 0x0B };
+            byte[] patchedInstruction2 = new byte[] { 0x8B, 0x05, 0x59, 0xC6, 0xB0, 0x0B };
             byte[] currentInstruction1 = GetArray<byte>(camoIndexInstructions, 6);
             byte[] currentInstruction2 = GetArray<byte>(camoIndexInstructions2, 6);
 
