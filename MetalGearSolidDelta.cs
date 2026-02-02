@@ -5,7 +5,7 @@ using CrowdControl.Common;
 using AddressChain = ConnectorLib.Memory.AddressChain<ConnectorLib.Inject.InjectConnector>;
 using ConnectorType = CrowdControl.Common.ConnectorType;
 using Log = CrowdControl.Common.Log;
- 
+
 namespace CrowdControl.Games.Packs.MetalGearSolidDelta;
 
 [SuppressMessage("ReSharper", "StringLiteralTypo")]
@@ -57,7 +57,6 @@ public class MetalGearSolidDelta : InjectEffectPack
     private AddressChain evasionTimer;
     private AddressChain cautionTimer;
     private AddressChain mapStringAddress;
-    private AddressChain restartStage;
 
     // Filters
     private AddressChain filterInstructions;
@@ -77,28 +76,6 @@ public class MetalGearSolidDelta : InjectEffectPack
     private AddressChain extraLightColourA;
     private AddressChain fogFilter;
 
-    // Guard Health, Sleep & Stun Statues
-    // Lethal Damage
-    private AddressChain flameDamage;
-    private AddressChain snakeWeaponDamage;
-    private AddressChain snakeWeaponDamageMulti;
-    private AddressChain guardThroatSlitDamage;
-
-    // Sleep Damage
-    private AddressChain sleepTimer1;
-    private AddressChain sleepTimer3;
-    private AddressChain sleepTimer2;
-    private AddressChain sleepDrain;
-    private AddressChain tranqHead;
-    private AddressChain tranqBody;
-
-    // Stun Damage
-    private AddressChain stunTimer1;
-    private AddressChain stunTimer2;
-    private AddressChain stunTimer3;
-    private AddressChain stunPunch;
-    private AddressChain stunGrenade;
-
     #endregion
 
     #region [De]init
@@ -108,91 +85,65 @@ public class MetalGearSolidDelta : InjectEffectPack
 
         Connector.PointerFormat = PointerFormat.Absolute64LE;
 
-        baseWeaponAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BCE20"); // Delta uses 88 bytes between weapons
-        baseItemAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BFB74"); // 80 Bytes between items like MC
+        baseWeaponAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135B7D20"); // Delta uses 88 bytes between weapons
+        baseItemAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135BAA74"); // 80 Bytes between items like MC
 
         // Snake Animations to test
-        snakeTrips = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C717B");
-        snakePukeFire = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C717C");
-        snakeSleeps = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135D475A");
+        snakeTrips = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C207B");
+        snakePukeFire = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C207C");
+        snakeSleeps = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135CF65A");
 
         // Snake Stats
-        snakeHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+7B4");
-        snakeMaxHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+7B6");
-        snakeStamina = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+B7A");
-        snakeCommonCold = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+81A");
-        snakePoison = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+828");
-        snakeFoodPoisoning = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+836");
-        snakeHasLeeches = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+844");
-        snakeCurrentEquippedWeapon = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+704");
-        snakeCurrentEquippedItem = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+706");
+        snakeHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+7B4");
+        snakeMaxHealth = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+7B6");
+        snakeStamina = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+B7A");
+        snakeCommonCold = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+81A");
+        snakePoison = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+828");
+        snakeFoodPoisoning = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+836");
+        snakeHasLeeches = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+844");
+        snakeCurrentEquippedWeapon = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+704");
+        snakeCurrentEquippedItem = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+706");
         // Probably not gonna use Facepaint and Camo unless I can figure out a way to force pause the game and refresh Snake's clothes
-        snakeCurrentCamo = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+7AE");
-        snakeCurrentFacePaint = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+7AF");
-        snakeDamageMultiplierInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7AD42A1");
-        snakeDamageMultiplierValue = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7AD42A3");
-        snakeTacticalReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A7FFF6");
-        snakeManualReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A7F6C4");
-        everyoneIsDrunk = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+56EB732");
+        snakeCurrentCamo = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+7AE");
+        snakeCurrentFacePaint = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+7AF");
+        snakeTacticalReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A7BEC6");
+        snakeManualReloadInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A7B594");
+        everyoneIsDrunk = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+56E8AB2");
 
-        camoIndexInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D1009C"); // 8B 05 36 FF FF FF | Restore: 8B 05 C2 70 8B 0B
-        camoIndexInstructions2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7AB9635"); // 8B 05 5D 40 25 00 | Restore: 8B 05 29 DB B0 0B
-        camoIndexValue = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D0FFD8"); // -1000 for -100% camo 1000 for 100% camo 4 byte value
+        camoIndexInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D0BF6C"); // 8B 05 36 FF FF FF | Restore: 8B 05 C2 70 8B 0B
+        camoIndexInstructions2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7A9C83A"); // 8B 05 9D 69 25 00 | Restore: 8B 05 38 57 A8 0C
+        camoIndexValue = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D0BEA8"); // -1000 for -100% camo 1000 for 100% camo 4 byte value
 
         // Game State
-        isPausedOrMenu = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135D846C");
-        mapStringAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C537038=>+24");
-        restartStage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1452D620");
+        isPausedOrMenu = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135D336C");
+        mapStringAddress = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+C532038=>+24");
 
         // 16 = Alert, 32 = Caution, 0 = No Alert
-        alertStatus = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C5248");
-        alertTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C51F4");
-        evasionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C520C");
-        cautionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C51F8");
+        alertStatus = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C0148");
+        alertTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C00F4");
+        evasionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C010C");
+        cautionTimer = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+135C00F8");
 
         // Filters
-        filterInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8E95D");
-        filterR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D660");
-        filterG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D664");
-        filterB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D668");
-        filterA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D66C");
+        filterInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8DD0D");
+        filterR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784A0");
+        filterG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784A4");
+        filterB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784A8");
+        filterA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784AC");
 
-        lightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8E9C8");
-        lightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D670");
-        lightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D674");
-        lightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D678");
-        lightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D67C");
+        lightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8DD78");
+        lightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784B0");
+        lightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784B4");
+        lightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784B8");
+        lightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784BC");
 
-        extraLightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8EA3F");
-        extraLightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D680");
-        extraLightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D684");
-        extraLightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D688");
-        extraLightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+1447D68C");
+        extraLightColourInstructions = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2B8DDEF");
+        extraLightColourR = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784C0");
+        extraLightColourG = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784C4");
+        extraLightColourB = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784C8");
+        extraLightColourA = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+144784CC");
 
-        fogFilter = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+26675CF");
-
-        // Guard Health, Sleep & Stun Statues
-        // Lethal Damage
-        snakeWeaponDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB67AA");
-        snakeWeaponDamageMulti = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB67C1");
-        flameDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB9606");
-        guardThroatSlitDamage = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7D1A8AA");
-
-        // Sleep Damage
-        sleepTimer1 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB9E7B");
-        sleepTimer2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB9E8D");
-        sleepTimer3 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB9E99");
-        sleepDrain = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CBB477");
-        tranqHead = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CD2764");
-        tranqBody = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CD52AB");
-
-        // Stun Damage
-        stunTimer1 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB958B");
-        stunTimer2 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB959D");
-        stunTimer3 = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CB95A9");
-        stunPunch = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CD25C8");
-        stunGrenade = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+7CD1F06");
-
+        fogFilter = AddressChain.Parse(Connector, "\"MGSDelta-Win64-Shipping.exe\"+2666E7F");
     }
 
     private void DeinitGame()
@@ -1305,12 +1256,12 @@ public class MetalGearSolidDelta : InjectEffectPack
         {
             byte[] currentBytes = GetArray<byte>(snakeDamageMultiplierInstructions, 62);
             byte[] expectedBytes = new byte[] {
-            0x66, 0xBD, 0x00, 0x00, 0x66, 0x0F, 0xAF, 0xC5, 0x66, 0x31, 0xED, 0xEB, 0x18, 0x90, 0x90, 0x90, 
+            0x66, 0xBD, 0x00, 0x00, 0x66, 0x0F, 0xAF, 0xC5, 0x66, 0x31, 0xED, 0xEB, 0x18, 0x90, 0x90, 0x90,
             0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90,
-            0x90, 0x90, 0x90, 0x90, 0x90, 0x66, 0x89, 0x93, 0x80, 0x2F, 0x00, 0x00, 0x48, 0x8B, 0x0D, 0x64, 
+            0x90, 0x90, 0x90, 0x90, 0x90, 0x66, 0x89, 0x93, 0x80, 0x2F, 0x00, 0x00, 0x48, 0x8B, 0x0D, 0x64,
             0x2D, 0xA6, 0x04, 0x4C, 0x8D, 0x0D, 0x65, 0xA7, 0x52, 0x02, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90
              };
-            
+
 
             bool needsUpdate = false;
             for (int i = 0; i < currentBytes.Length; i++)
@@ -1379,9 +1330,9 @@ public class MetalGearSolidDelta : InjectEffectPack
     {
         try
         {
-            byte[] camoIndexInstruction = new byte[] { 0x8B, 0x05, 0x42, 0x5D, 0x8B, 0x0B };
+            byte[] camoIndexInstruction = new byte[] { 0x8B, 0x05, 0xF2, 0x60, 0x8B, 0x0B };
             SetArray(camoIndexInstructions, camoIndexInstruction);
-            byte[] camoIndexInstruction2 = new byte[] { 0x8B, 0x05, 0xA9, 0xDE, 0xB0, 0x0B };
+            byte[] camoIndexInstruction2 = new byte[] { 0x8B, 0x05, 0x38, 0x57, 0xA8, 0x0C };
             SetArray(camoIndexInstructions2, camoIndexInstruction2);
         }
         catch (Exception ex)
@@ -1394,9 +1345,9 @@ public class MetalGearSolidDelta : InjectEffectPack
     {
         try
         {
-            byte[] camoIndexInstruction = new byte[] { 0x8B, 0x05, 0x36, 0xFF, 0xFF, 0xFF }; // Patched instruction 1
+            byte[] camoIndexInstruction = new byte[] { 0x8B, 0x05, 0x36, 0xFF, 0xFF, 0xFF };
             SetArray(camoIndexInstructions, camoIndexInstruction);
-            byte[] camoIndexInstruction2 = new byte[] { 0x8B, 0x05, 0x6D, 0x69, 0x25, 0x00 }; // Patched instruction 2
+            byte[] camoIndexInstruction2 = new byte[] { 0x8B, 0x05, 0x9D, 0x69, 0x25, 0x00 };
             SetArray(camoIndexInstructions2, camoIndexInstruction2);
         }
         catch (Exception ex)
@@ -1423,8 +1374,8 @@ public class MetalGearSolidDelta : InjectEffectPack
     {
         try
         {
-            byte[] patchedInstruction1 = new byte[] { 0x8B, 0x05, 0xE2, 0x5B, 0x8B, 0x0B };
-            byte[] patchedInstruction2 = new byte[] { 0x8B, 0x05, 0x59, 0xC6, 0xB0, 0x0B };
+            byte[] patchedInstruction1 = new byte[] { 0x8B, 0x05, 0x36, 0xFF, 0xFF, 0xFF };
+            byte[] patchedInstruction2 = new byte[] { 0x8B, 0x05, 0x9D, 0x69, 0x25, 0x00 };
             byte[] currentInstruction1 = GetArray<byte>(camoIndexInstructions, 6);
             byte[] currentInstruction2 = GetArray<byte>(camoIndexInstructions2, 6);
 
@@ -1438,263 +1389,6 @@ public class MetalGearSolidDelta : InjectEffectPack
             return false;
         }
     }
-
-    #endregion
-
-    #region Guard Stats
-
-    #region Lethal Damage
-
-    private void SetGuardLethalDamageInvincible()
-    {
-        try
-        {
-            SetArray(snakeWeaponDamage, new byte[] { 0x74, 0x0F, 0x0F, 0xB7, 0x42, 0x08, 0x48, 0x83, 0xC2, 0x08, 0x66, 0x85, 0xC0, 0x79, 0xED, 0x33, 0xC0, 0xF3, 0x0F, 0x59, 0xC1, 0x49, 0xBC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x66, 0x4D, 0x0F, 0x6E, 0xD4, 0xF3, 0x0F, 0x5A, 0xC0, 0xF2, 0x41, 0x0F, 0x59, 0xC2, 0x90, 0x90, 0x90, 0x90, 0xF2, 0x0F, 0x2C, 0xC0, 0xC3 });
-            SetArray(snakeWeaponDamageMulti, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 });
-            Set32(flameDamage, 9000);
-            Set32(guardThroatSlitDamage, 9000);
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Lethal Damage to Oneshot: {ex.Message}");
-        }
-    }
-
-    private void SetGuardLethalDamageVeryStrong()
-    {
-        try
-        {
-            SetArray(snakeWeaponDamage, new byte[] { 0x74, 0x0F, 0x0F, 0xB7, 0x42, 0x08, 0x48, 0x83, 0xC2, 0x08, 0x66, 0x85, 0xC0, 0x79, 0xED, 0x33, 0xC0, 0xF3, 0x0F, 0x59, 0xC1, 0x49, 0xBC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x66, 0x4D, 0x0F, 0x6E, 0xD4, 0xF3, 0x0F, 0x5A, 0xC0, 0xF2, 0x41, 0x0F, 0x59, 0xC2, 0x90, 0x90, 0x90, 0x90, 0xF2, 0x0F, 0x2C, 0xC0, 0xC3 });
-            SetArray(snakeWeaponDamageMulti, new byte[] { 0x9A, 0x99, 0x99, 0x99, 0x99, 0x99, 0xB9, 0x3F });
-            Set32(flameDamage, 0);
-            Set32(guardThroatSlitDamage, 0);
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Lethal Damage to Oneshot: {ex.Message}");
-        }
-    }
-
-    private void SetGuardLethalDamageDefault()
-    {
-        try
-        {
-            SetArray(snakeWeaponDamage, new byte[] { 0x74, 0x0F, 0x0F, 0xB7, 0x42, 0x08, 0x48, 0x83, 0xC2, 0x08, 0x66, 0x85, 0xC0, 0x79, 0xED, 0x33, 0xC0, 0xF3, 0x0F, 0x59, 0xC1, 0x49, 0xBC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x66, 0x4D, 0x0F, 0x6E, 0xD4, 0xF3, 0x0F, 0x5A, 0xC0, 0xF2, 0x41, 0x0F, 0x59, 0xC2, 0x90, 0x90, 0x90, 0x90, 0xF2, 0x0F, 0x2C, 0xC0, 0xC3 });
-            SetArray(snakeWeaponDamageMulti, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F });
-            Set32(flameDamage, 0);
-            Set32(guardThroatSlitDamage, 0);
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Lethal Damage to Oneshot: {ex.Message}");
-        }
-    }
-
-    private void SetGuardLethalDamageVeryWeak()
-    {
-        try
-        {
-            SetArray(snakeWeaponDamage, new byte[] { 0x74, 0x0F, 0x0F, 0xB7, 0x42, 0x08, 0x48, 0x83, 0xC2, 0x08, 0x66, 0x85, 0xC0, 0x79, 0xED, 0x33, 0xC0, 0xF3, 0x0F, 0x59, 0xC1, 0x49, 0xBC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x66, 0x4D, 0x0F, 0x6E, 0xD4, 0xF3, 0x0F, 0x5A, 0xC0, 0xF2, 0x41, 0x0F, 0x59, 0xC2, 0x90, 0x90, 0x90, 0x90, 0xF2, 0x0F, 0x2C, 0xC0, 0xC3 });
-            SetArray(snakeWeaponDamageMulti, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40 });
-            Set32(flameDamage, 0);
-            Set32(guardThroatSlitDamage, 0);
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Lethal Damage to Oneshot: {ex.Message}");
-        }
-    }
-
-    private void SetGuardLethalDamageOneshot()
-    {
-        try
-        {
-            SetArray(snakeWeaponDamage, new byte[] { 0x74, 0x0F, 0x0F, 0xB7, 0x42, 0x08, 0x48, 0x83, 0xC2, 0x08, 0x66, 0x85, 0xC0, 0x79, 0xED, 0x33, 0xC0, 0xF3, 0x0F, 0x59, 0xC1, 0x49, 0xBC, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x3F, 0x66, 0x4D, 0x0F, 0x6E, 0xD4, 0xF3, 0x0F, 0x5A, 0xC0, 0xF2, 0x41, 0x0F, 0x59, 0xC2, 0x90, 0x90, 0x90, 0x90, 0xF2, 0x0F, 0x2C, 0xC0, 0xC3 });
-            SetArray(snakeWeaponDamageMulti, new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x24, 0x40 });
-            Set32(flameDamage, 0);
-            Set32(guardThroatSlitDamage, 0);
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Lethal Damage to Oneshot: {ex.Message}");
-        }
-    }
-
-
-    #endregion
-
-    #region Sleep Damage
-
-    private void SetGuardSleepDamageAlmostInvincible()
-    {
-        try
-        {
-            Set32(sleepTimer1, 90000);
-            Set32(sleepTimer2, 90000);
-            Set32(sleepTimer3, 90000);
-            SetArray(sleepDrain, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-            SetArray(tranqHead, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-            SetArray(tranqBody, new byte[] { 0x90, 0x90, 0x90, 0x90, 0x90, 0x90 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Sleep Damage to Invincible: {ex.Message}");
-        }
-    }
-
-    private void SetGuardSleepDamageVeryStrong()
-    {
-        try
-        {
-            Set32(sleepTimer1, -1000);
-            Set32(sleepTimer2, -1000);
-            Set32(sleepTimer3, -1000);
-            SetArray(sleepDrain, new byte[] { 0x89, 0x87, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqHead, new byte[] { 0x44, 0x29, 0xB6, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqBody, new byte[] { 0x89, 0x8B, 0x48, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Sleep Damage to Very Strong: {ex.Message}");
-        }
-    }
-
-    private void SetGuardSleepDamageDefault()
-    {
-        try
-        {
-            Set32(sleepTimer1, -90000);
-            Set32(sleepTimer2, -54000);
-            Set32(sleepTimer3, -36000);
-            SetArray(sleepDrain, new byte[] { 0x89, 0x87, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqHead, new byte[] { 0x44, 0x29, 0xB6, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqBody, new byte[] { 0x89, 0x8B, 0x48, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Sleep Damage to Default: {ex.Message}");
-        }
-    }
-
-    private void SetGuardSleepDamageVeryWeak()
-    {
-        try
-        {
-            Set32(sleepTimer1, -40000);
-            Set32(sleepTimer2, -40000);
-            Set32(sleepTimer3, -40000);
-            SetArray(sleepDrain, new byte[] { 0x89, 0x87, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqHead, new byte[] { 0x44, 0x29, 0xB6, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqBody, new byte[] { 0x89, 0x8B, 0x48, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Sleep Damage to Very Weak: {ex.Message}");
-        }
-    }
-
-    private void SetGuardSleepDamageOneshot()
-    {
-        try
-        {
-            Set32(sleepTimer1, -1000000);
-            Set32(sleepTimer2, -1000000);
-            Set32(sleepTimer3, -1000000);
-            SetArray(sleepDrain, new byte[] { 0x89, 0x87, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqHead, new byte[] { 0x44, 0x29, 0xB6, 0x48, 0x01, 0x00, 0x00 });
-            SetArray(tranqBody, new byte[] { 0x89, 0x8B, 0x48, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Sleep Damage to Oneshot: {ex.Message}");
-        }
-    }
-
-    #endregion
-
-    #region Stun Damage
-
-    private void SetGuardStunAlmostDamageInvincible()
-    {
-        try
-        {
-            Set32(stunTimer1, 90000);
-            Set32(stunTimer2, 90000);
-            Set32(stunTimer3, 90000);
-            SetArray(stunPunch, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-            SetArray(stunGrenade, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Stun Damage to Almost Invincible: {ex.Message}");
-        }
-    }
-
-    private void SetGuardStunDamageVeryStrong()
-    {
-        try
-        {
-            Set32(stunTimer1, -1000);
-            Set32(stunTimer2, -1000);
-            Set32(stunTimer3, -1000);
-            SetArray(stunPunch, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-            SetArray(stunGrenade, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Stun Damage to Very Strong: {ex.Message}");
-        }
-    }
-
-    private void SetGuardStunDamageDefault()
-    {
-        try
-        {
-            Set32(stunTimer1, -90000);
-            Set32(stunTimer2, -54000);
-            Set32(stunTimer3, -36000);
-            SetArray(stunPunch, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-            SetArray(stunGrenade, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Stun Damage to Default: {ex.Message}");
-        }
-    }
-
-    private void SetGuardStunDamageVeryWeak()
-    {
-        try
-        {
-            Set32(stunTimer1, -40000);
-            Set32(stunTimer2, -40000);
-            Set32(stunTimer3, -40000);
-            SetArray(stunPunch, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-            SetArray(stunGrenade, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Stun Damage to Very Weak: {ex.Message}");
-        }
-    }
-
-    private void SetGuardStunDamageOneshot()
-    {
-        try
-        {
-            Set32(stunTimer1, -1000000);
-            Set32(stunTimer2, -1000000);
-            Set32(stunTimer3, -1000000);
-            SetArray(stunPunch, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-            SetArray(stunGrenade, new byte[] { 0x29, 0x86, 0x40, 0x01, 0x00, 0x00 });
-        }
-        catch (Exception ex)
-        {
-            Log.Error($"An error occurred while setting Guard Stun Damage to One Shot: {ex.Message}");
-        }
-    }
-
-    #endregion
 
     #endregion
 
@@ -3893,78 +3587,6 @@ public class MetalGearSolidDelta : InjectEffectPack
         },
 
     #endregion
-
-    #region Damage to Snake Multipliers
-
-    new ("Snake takes x2 Damage", "setSnakeDamageX2")
-        {
-        Price = 80,
-        Duration = 30,
-        Description = "Doubles the damage Snake takes for a limited time",
-        Category = "Damage to Snake Multipliers"
-        },
-
-    new ("Snake takes x3 Damage", "setSnakeDamageX3")
-        {
-        Price = 150,
-        Duration = 30,
-        Description = "Triples the damage Snake takes for a limited time",
-        Category = "Damage to Snake Multipliers"
-        },
-
-    new ("Snake takes x4 Damage", "setSnakeDamageX4")
-        {
-        Price = 250,
-        Duration = 30,
-        Description = "Quadruples the damage Snake takes for a limited time",
-        Category = "Damage to Snake Multipliers"
-        },
-
-    new ("Snake takes x5 Damage", "setSnakeDamageX5")
-        {
-        Price = 350,
-        Duration = 30,
-        Description = "Quintuples the damage Snake takes for a limited time",
-        Category = "Damage to Snake Multipliers"
-        },
-
-    #endregion
-
-    #region Guard Stats
-
-    new ("Guards are Almost Invincible", "setGuardStatsAlmostInvincible")
-        {
-        Price = 250,
-        Duration = 30,
-        Description = "Guards become almost invincible to lethal, sleep, and stun damage",
-        Category = "Guard Stats"
-        },
-
-    new ("Guards become Very Strong", "setGuardStatsVeryStrong")
-        {
-        Price = 150,
-        Duration = 30,
-        Description = "Guards become very strong against lethal, sleep, and stun damage",
-        Category = "Guard Stats"
-        },
-
-    new ("Guards become Very Weak", "setGuardStatsVeryWeak")
-        {
-        Price = 150,
-        Duration = 30,
-        Description = "Guards become very weak against lethal, sleep, and stun damage",
-        Category = "Guard Stats"
-        },
-
-    new ("Guards can be One Shot", "setGuardStatsOneShot")
-        {
-        Price = 250,
-        Duration = 30,
-        Description = "Guards become one shot by lethal, sleep, and stun damage",
-        Category = "Guard Stats"
-        },
-
-        #endregion
     
     };
 
@@ -6276,126 +5898,6 @@ public class MetalGearSolidDelta : InjectEffectPack
 
             #endregion
 
-            #region Damage to Snake Multipliers
-
-            case "setSnakeDamageX2":
-                if (IsInCutscene() || !CanSetSnakeDamageMultiplier())
-                {
-                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
-                    return;
-                }
-                var damageX2Duration = request.Duration;
-                var damageX2Act = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set Snake's damage multiplier to x2 for {damageX2Duration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetSnakeDamageMultiplierInstruction();
-                        SetSnakeDamageMultiplierValue(2);
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-                damageX2Act.WhenCompleted.Then
-                    (_ =>
-                {
-                    SetSnakeDamageMultiplierValue(1);
-                    Connector.SendMessage("Snake's damage multiplier is back to x1.");
-                });
-                break;
-
-            case "setSnakeDamageX3":
-                if (IsInCutscene() || !CanSetSnakeDamageMultiplier())
-                {
-                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
-                    return;
-                }
-                var damageX3Duration = request.Duration;
-                var damageX3Act = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set Snake's damage multiplier to x3 for {damageX3Duration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetSnakeDamageMultiplierInstruction();
-                        SetSnakeDamageMultiplierValue(3);
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-                damageX3Act.WhenCompleted.Then
-                    (_ =>
-                {
-                    SetSnakeDamageMultiplierValue(1);
-                    Connector.SendMessage("Snake's damage multiplier is back to x1.");
-                });
-                break;
-
-            case "setSnakeDamageX4":
-                if (IsInCutscene() || !CanSetSnakeDamageMultiplier())
-                {
-                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
-                    return;
-                }
-                var damageX4Duration = request.Duration;
-                var damageX4Act = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set Snake's damage multiplier to x4 for {damageX4Duration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetSnakeDamageMultiplierInstruction();
-                        SetSnakeDamageMultiplierValue(4);
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-                damageX4Act.WhenCompleted.Then
-                    (_ =>
-                {
-                    SetSnakeDamageMultiplierValue(1);
-                    Connector.SendMessage("Snake's damage multiplier is back to x1.");
-                });
-                break;
-
-            case "setSnakeDamageX5":
-                if (IsInCutscene() || !CanSetSnakeDamageMultiplier())
-                {
-                    DelayEffect(request, StandardErrors.BadGameState, GameState.Cutscene);
-                    return;
-                }
-                var damageX5Duration = request.Duration;
-                var damageX5Act = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set Snake's damage multiplier to x5 for {damageX5Duration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetSnakeDamageMultiplierInstruction();
-                        SetSnakeDamageMultiplierValue(5);
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-                damageX5Act.WhenCompleted.Then
-                    (_ =>
-                {
-                    SetSnakeDamageMultiplierValue(1);
-                    Connector.SendMessage("Snake's damage multiplier is back to x1.");
-                });
-                break;
-
-            #endregion
-
             #region Snake's Stats and Active Equipment
 
             case "MakeSnakeTrip":
@@ -6470,131 +5972,8 @@ public class MetalGearSolidDelta : InjectEffectPack
                 break;
 
             #endregion
-
-            #region Guard Stats
-
-            case "setGuardStatsAlmostInvincible":
-                var almostInvincibleDuration = request.Duration;
-
-                var almostInvincibleAct = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set the guards to be almost invincible for {almostInvincibleDuration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetGuardLethalDamageInvincible();
-                        SetGuardSleepDamageAlmostInvincible();
-                        SetGuardStunAlmostDamageInvincible();
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-
-                almostInvincibleAct.WhenCompleted.Then
-                (_ =>
-                {
-                    SetGuardLethalDamageDefault();
-                    SetGuardSleepDamageDefault();
-                    SetGuardStunDamageDefault();
-                    Connector.SendMessage("Guard stats are back to default.");
-                });
-
-                break;
-
-            case "setGuardStatsVeryStrong":
-                var veryStrongDuration = request.Duration;
-
-                var veryStrongAct = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set the guards to be very strong for {veryStrongDuration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetGuardLethalDamageVeryStrong();
-                        SetGuardSleepDamageVeryStrong();
-                        SetGuardStunDamageVeryStrong();
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-                veryStrongAct.WhenCompleted.Then
-                (_ =>
-                {
-                    SetGuardLethalDamageDefault();
-                    SetGuardSleepDamageDefault();
-                    SetGuardStunDamageDefault();
-                    Connector.SendMessage("Guard stats are back to default.");
-                });
-
-                break;
-
-            case "setGuardStatsVeryWeak":
-                var veryWeakDuration = request.Duration;
-
-                var veryWeakAct = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set the guards to be very weak for {veryWeakDuration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetGuardLethalDamageVeryWeak();
-                        SetGuardSleepDamageVeryWeak();
-                        SetGuardStunDamageVeryWeak();
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-                veryWeakAct.WhenCompleted.Then
-                (_ =>
-                {
-                    SetGuardLethalDamageDefault();
-                    SetGuardSleepDamageDefault();
-                    SetGuardStunDamageDefault();
-                    Connector.SendMessage("Guard stats are back to default.");
-                });
-                break;
-
-            case "setGuardStatsOneShot":
-                var oneShotDuration = request.Duration;
-
-                var oneShotAct = RepeatAction(request,
-                    () => true,
-                    () => Connector.SendMessage($"{request.DisplayViewer} set the guards to be one shot for {oneShotDuration.TotalSeconds} seconds."),
-                    TimeSpan.Zero,
-                    () => IsReady(request),
-                    TimeSpan.FromMilliseconds(500),
-                    () =>
-                    {
-                        SetGuardLethalDamageOneshot();
-                        SetGuardSleepDamageOneshot();
-                        SetGuardStunDamageOneshot();
-                        return true;
-                    },
-                    TimeSpan.FromMilliseconds(500),
-                    false);
-                oneShotAct.WhenCompleted.Then
-                (_ =>
-                {
-                    SetGuardLethalDamageDefault();
-                    SetGuardSleepDamageDefault();
-                    SetGuardStunDamageDefault();
-                    Connector.SendMessage("Guard stats are back to default.");
-                });
-                break;
-
-            default:
-                Respond(request, EffectStatus.FailPermanent, StandardErrors.UnknownEffect, request);
-                break;
-
-                #endregion
         }
     }
 }
 
-#endregion
+    #endregion
