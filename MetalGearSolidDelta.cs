@@ -2352,7 +2352,7 @@ public class MetalGearSolidDelta : InjectEffectPack
 
     #region Crowd Control Effects - Pricing, Descriptions, Etc
 
-    public override EffectList Effects => new List<Effect>
+    public override EffectList Effects { get; } = new List<Effect>
     {
     
     #region Snake's Active Equipment
